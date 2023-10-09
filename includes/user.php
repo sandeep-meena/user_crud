@@ -94,4 +94,21 @@ class User extends Database
 
         return $result;
     }
+    public function deleteUser($user_id)
+    {
+        $query = "DELETE FROM {$this->tableName} WHERE user_id=:user_id";
+
+
+        $stmt = $this->conn->prepare($query);
+
+        try {
+            $stmt->execute([":user_id" => $user_id]);
+            if ($stmt->rowCount() > 0) {
+                return true;
+            }
+        } catch (PDOException $e) {
+            echo "Error : " . $e->getMessage();
+            return false;
+        }
+    }
 }

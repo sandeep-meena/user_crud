@@ -57,3 +57,18 @@ if ($action == "getuser") {
         exit();
     }
 }
+if ($action == "deleteuser") {
+    $userId = (!empty($_GET['user_id'])) ? $_GET['user_id'] : '';
+
+    if (!empty($userId)) {
+
+        $isDeleted = $obj->deleteUser($userId);
+        if ($isDeleted) {
+            $message = ['deleted' => 1];
+        } else {
+            $message = ['deleted' => 0];
+        }
+        echo json_encode($message);
+        exit();
+    }
+}

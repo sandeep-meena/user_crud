@@ -126,5 +126,34 @@ $(document).ready(function () {
 
     });
 
+    $(document).on("click", "a.deleteuser ", function () {
+        var userId = $(this).data("id");
+
+        if (confirm("Are your sure want to delete this?")) {
+            $.ajax({
+                url: "/user/ajax.php",
+                type: "GET",
+                dataType: "json",
+                data: { user_id: userId, action: "deleteuser" },
+                beforSend: function () {
+                    $("#overlay").fadeIn();
+                },
+                success: function (res) {
+                    if (res) {
+
+                        getUsers();
+                        $("#overlay").fadeOut();
+                    }
+                },
+                error: function () {
+                    console.log("something went wrong... !!!!");
+
+                }
+            });
+        }
+
+
+    });
+
     getUsers();
 });
