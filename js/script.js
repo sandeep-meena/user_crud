@@ -108,7 +108,7 @@ $(document).ready(function () {
             },
             success: function (user) {
 
-                console.log(user);
+                // console.log(user);
                 if (user) {
                     $("#username").val(user.username);
                     $("#userid").val(user.user_id);
@@ -126,7 +126,52 @@ $(document).ready(function () {
 
     });
 
-    $(document).on("click", "a.deleteuser ", function () {
+    $(document).on("click", "a.profile", function () {
+        var userId = $(this).data("id");
+
+        $.ajax({
+            url: "/user/ajax.php",
+            type: "GET",
+            dataType: "json",
+            data: { user_id: userId, action: "getuser" },
+            beforSend: function () {
+                $("#overlay").fadeIn();
+            },
+            success: function (user) {
+                if (user) {
+
+                    const profile = ` <div class="row">
+    
+                    <div class="col-sm-6 col-md-8">
+                       <h4 class="text-primary">${user.username}</h4>
+                       <p class"text-primary">Active : ${user.active}</p>
+
+                       <h4 class="text-primary">Address</h4>
+                       
+                       <p class="text-secondary">
+                           vadodara,Gujarat
+                       </p>
+                     
+                      </div>
+                </div>`
+                    $("#profile").html(profile);
+                }
+
+                $("#overlay").fadeOut();
+
+
+            },
+            error: function () {
+                console.log("something went wrong... !!!!");
+
+            }
+        });
+
+
+    });
+
+    $(document).on("click", "a.deleteuser ", function (e) {
+        e.preventDefault()
         var userId = $(this).data("id");
 
         if (confirm("Are your sure want to delete this?")) {

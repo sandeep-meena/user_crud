@@ -9,16 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="container" id="profile">
-                    <div class="row">
 
-                        <div class="col-sm-6 col-md-8">
-                            <h4 class="text-primary">username</h4>
-                            <p class="text-secondary">
-                                vadodara,Gujarat
-                            </p>
-                            <!-- Split button -->
-                        </div>
-                    </div>
 
                 </div>
             </div>
