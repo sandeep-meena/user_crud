@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once 'Database.php';
 
 class User extends Database
 {
@@ -24,8 +24,8 @@ class User extends Database
         try {
             $this->conn->beginTransaction();
             $stmt->execute($data);
-            $this->conn->commit();
             $lastInsertedId =   $this->conn->lastInsertId();
+            $this->conn->commit();
             return $lastInsertedId;
         } catch (PDOException $e) {
             echo "Error : " . $e->getMessage();
@@ -33,10 +33,41 @@ class User extends Database
         }
     }
 
-    public function getUsers($start = 0, $limit = 4)
+    public function updateUser($data, $user_id)
     {
 
-        $query = "SELECT * FROM {$this->tableName} ORDER BY DESC LIMIT {$start}, {$limit} ";
+        if (!empty($data)) {
+            $fields = '';
+            $x = 1;
+            $fieldsCount = count($data);
+            foreach ($data as $field => $value) {
+                $fields .= "{$field} = :{$field}";
+                if ($x < $fieldsCount) {
+
+                    $fields .= ", ";
+                }
+                $x++;
+            }
+        }
+        $query = "UPDATE {$this->tableName} SET {$fields} WHERE user_id=:user_id";
+
+        $stmt  = $this->conn->prepare($query);
+
+        try {
+            $this->conn->beginTransaction();
+            $data['user_id'] = $user_id;
+            $stmt->execute($data);
+            $this->conn->commit();
+        } catch (PDOException $e) {
+            echo "Error : " . $e->getMessage();
+            $this->conn->rollBack();
+        }
+    }
+
+    public function getUsers()
+    {
+
+        $query = "SELECT * FROM {$this->tableName} ";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -52,7 +83,7 @@ class User extends Database
     public function getSingleUser($field, $value)
     {
 
-        $query = "SELECT * FROM {$this->tableName} WHERE {$field}=:{$value} ";
+        $query = "SELECT * FROM {$this->tableName} WHERE {$field}=:{$field} ";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([":{$field}" => $value]);
         if ($stmt->rowCount() > 0) {

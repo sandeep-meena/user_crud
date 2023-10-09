@@ -26,7 +26,7 @@
 
         <div class="row mb-3">
             <div class="col-3">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#userModal">Add New User <i class="fa fa-user-circle-o"></i></button>
+                <button type="button" class="btn btn-info" data-toggle="modal" id="addnewbtn" data-target="#userModal">Add New User <i class="fa fa-user-circle-o"></i></button>
             </div>
         </div>
 
@@ -41,6 +41,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <script src="js/script.js"></script>
 
     </div>
     <div id="overlay" style="display:none;">
@@ -49,6 +50,5 @@
         Loading...
     </div>
 </body>
-
 
 </html>
