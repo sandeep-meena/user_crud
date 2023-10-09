@@ -19,6 +19,7 @@
 
         <?php
         include_once 'form.php';
+        include_once 'AddressForm.php';
         include_once 'userProfile.php';
         ?>
 
@@ -27,6 +28,9 @@
         <div class="row mb-3">
             <div class="col-3">
                 <button type="button" class="btn btn-info" data-toggle="modal" id="addnewbtn" data-target="#userModal">Add New User <i class="fa fa-user-circle-o"></i></button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-info" data-toggle="modal" id="addAddressBtn" data-target="#AddressModal">Add Address <i class="fa fa-address-card-o"></i></button>
             </div>
         </div>
 

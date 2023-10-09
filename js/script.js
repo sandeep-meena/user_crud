@@ -6,11 +6,7 @@ function getUserRow(user) {
         <td class="align-middle">${user.user_id}</td>
         <td class="align-middle">${user.username}</td>
         <td class="align-middle">${user.active}</td>
-        <td class="align-middle">
-            <a href="#" class="btn btn-primary addAddress" data-id="${user.user_id}" data-userid="14" title="add Address">Add Address</a>
-        </td>
-
-        <td class="align-middle">
+           <td class="align-middle">
             <a href="#" class="btn btn-success mr-3 profile"  data-id="${user.user_id}" data-toggle="modal" data-target="#userViewModal" title="Prfile"><i class="fa fa-address-card-o" aria-hidden="true"> View</i></a>
         </td>
         <td class="align-middle">
@@ -18,7 +14,7 @@ function getUserRow(user) {
 
         </td>
         <td class="align-middle">
-            <a href="#" class="btn btn-danger  deleteuser" data-id="${user.user_id}" data-userid="14" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
+            <a href="#"  class="btn btn-danger  deleteuser" data-id="${user.user_id}" data-userid="14" title="Delete"><i class="fa fa-trash-o fa-lg"></i></a>
 
         </td>
 
@@ -26,6 +22,29 @@ function getUserRow(user) {
     }
     return userRow;
 }
+
+
+
+function getAddress(add) {
+    var addRow = '';
+
+    if (add) {
+        addRow = `${add.user_address}`
+    }
+    return addRow;
+}
+
+
+function gu(u) {
+    var userRow = ''
+
+    if (u) {
+        userRow = `
+        <option value="${u.user_id}">${u.username}</option>`
+    }
+    return userRow;
+}
+
 
 function getUsers() {
 
@@ -48,7 +67,14 @@ function getUsers() {
 
                 });
 
+                var userslist1 = "";
+                $.each(rows, function (index, u) {
+                    userslist1 += gu(u);
+
+                });
+
                 $('#userstable tbody').html(userslist);
+                $('#ADD select').html(userslist1);
                 $("#overlay").fadeOut();
             }
 
@@ -60,6 +86,8 @@ function getUsers() {
         }
     });
 }
+
+//add user
 
 $(document).ready(function () {
     $(document).on("submit", "#addform", function (event) {
@@ -95,6 +123,8 @@ $(document).ready(function () {
         $("#userid").val("");
     })
 
+    //edit user
+
     $(document).on("click", "a.edituser", function () {
         var userId = $(this).data("id");
 
@@ -126,6 +156,8 @@ $(document).ready(function () {
 
     });
 
+    //view profile
+
     $(document).on("click", "a.profile", function () {
         var userId = $(this).data("id");
 
@@ -147,10 +179,6 @@ $(document).ready(function () {
                        <p class"text-primary">Active : ${user.active}</p>
 
                        <h4 class="text-primary">Address</h4>
-                       
-                       <p class="text-secondary">
-                           vadodara,Gujarat
-                       </p>
                      
                       </div>
                 </div>`
@@ -169,6 +197,8 @@ $(document).ready(function () {
 
 
     });
+
+    //deletuser
 
     $(document).on("click", "a.deleteuser ", function (e) {
         e.preventDefault()
@@ -200,5 +230,77 @@ $(document).ready(function () {
 
     });
 
+
+
+    //address
+
+    $(document).on("submit", "#addAddressForm", function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: "/user/ajax.php",
+            type: "POST",
+            dataType: "json",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                $("#overlay").fadeIn();
+            },
+            success: function (res) {
+                console.log(res);
+                if (res) {
+
+                    $("#AddressModal").modal("hide");
+                    $("#addAddressForm")[0].reset();
+                    getUsers();
+                    $("#overlay").fadeOut();
+                }
+            },
+            error: function () {
+                console.log("something went wrong !!!!");
+            }
+        });
+    });
+
+    function getAddress() {
+
+
+        $.ajax({
+            url: "/user/ajax.php",
+            type: "GET",
+            dataType: "json",
+            data: { action: "getAddress" },
+            beforSend: function () {
+                $("#overlay").fadeIn();
+            },
+            success: function (rows) {
+
+                if (rows) {
+                    // console.log(rows);
+                    console.log(rows);
+                    var addresslist = "";
+                    $.each(rows, function (index, add) {
+
+                        addresslist += getAddress(add);
+
+                    });
+
+                    $('#Address').html(addresslist);
+                    $("#overlay").fadeOut();
+                }
+
+
+            },
+            error: function () {
+                console.log("something went wrong... !!!!");
+
+            }
+        });
+    }
+
+
     getUsers();
+    getAddress();
+
 });

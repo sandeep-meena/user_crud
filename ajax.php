@@ -4,7 +4,10 @@ $action = $_REQUEST['action'];
 if (!empty($action)) {
 
     require_once 'includes/User.php';
+    require_once 'includes/Address.php';
+
     $obj = new User();
+    $obj1 = new Address();
 }
 
 if ($action == "adduser" && !empty($_POST)) {
@@ -69,6 +72,53 @@ if ($action == "deleteuser") {
             $message = ['deleted' => 0];
         }
         echo json_encode($message);
+        exit();
+    }
+}
+
+
+//address
+
+if ($action == "addAddress" && !empty($_POST)) {
+
+    $address = $_POST['address'];
+    $userid = $_POST['user_id'];
+    $default = $_POST['is_default'];
+
+
+    $user_address_id = (!empty($_POST['addressid'])) ? $_POST['addressid'] : '';
+
+    $addressData = [
+        'user_id' => $userid,
+        'user_address' => $address,
+        'is_default' => $default,
+    ];
+
+    // if ($user_address_id) {
+    //     $obj->updateUser($addressData, $user_address_id);
+    // } else {
+
+    $user_address_id = $obj1->addAddress($addressData);
+    // }
+
+    if (!empty($user_address_id)) {
+        $address = $obj1->getSingleAddress('user_address_id', $user_address_id);
+        echo json_encode($address);
+        exit();
+    }
+
+
+    if ($action == "getAddress") {
+        $page = (!empty($_GET['page'])) ? $_GET['page'] : 1;
+        $address = $obj1->getAddress();
+
+        if (!empty($address)) {
+            $addressList = $address;
+        } else {
+            $addressList = [];
+        }
+
+        echo json_encode($addressList);
         exit();
     }
 }

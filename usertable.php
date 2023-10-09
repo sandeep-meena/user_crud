@@ -4,7 +4,6 @@
             <th scope="col">user id</th>
             <th scope="col">UserName</th>
             <th scope="col">Active</th>
-            <th scope="col">Add Address</th>
             <th scope="col">View</th>
             <th scope="col">Update </th>
             <th scope="col">Delete </th>
